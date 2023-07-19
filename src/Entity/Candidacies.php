@@ -16,7 +16,7 @@ class Candidacies
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidacies')]
-    private ?Annoncement $annoncement_id = null;
+    private ?Announcement $annoncement_id = null;
 
     #[ORM\OneToMany(mappedBy: 'candidacies', targetEntity: Users::class)]
     private Collection $User_id;
@@ -31,12 +31,12 @@ class Candidacies
         return $this->id;
     }
 
-    public function getAnnoncementId(): ?Annoncement
+    public function getAnnouncementId(): ?Announcement
     {
         return $this->annoncement_id;
     }
 
-    public function setAnnoncementId(?Annoncement $annoncement_id): self
+    public function setAnnouncementId(?Announcement $annoncement_id): self
     {
         $this->annoncement_id = $annoncement_id;
 

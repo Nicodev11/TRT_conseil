@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\AnnoncementRepository;
+use App\Repository\AnnouncementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AnnoncementRepository::class)]
-class Annoncement
+#[ORM\Entity(repositoryClass: AnnouncementRepository::class)]
+class Announcement
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,7 +19,7 @@ class Annoncement
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annoncements')]
+    #[ORM\ManyToOne(inversedBy: 'announcements')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categories $category_id = null;
 
@@ -29,7 +29,7 @@ class Annoncement
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annoncements')]
+    #[ORM\ManyToOne(inversedBy: 'announcements')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company_id = null;
 
@@ -45,7 +45,7 @@ class Annoncement
     #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'annoncement_id', targetEntity: Candidacies::class)]
+    #[ORM\OneToMany(mappedBy: 'announcement_id', targetEntity: Candidacies::class)]
     private Collection $candidacies;
 
     public function __construct()
@@ -179,7 +179,7 @@ class Annoncement
     {
         if (!$this->candidacies->contains($candidacy)) {
             $this->candidacies->add($candidacy);
-            $candidacy->setAnnoncementId($this);
+            $candidacy->setAnnouncementId($this);
         }
 
         return $this;
@@ -189,8 +189,8 @@ class Annoncement
     {
         if ($this->candidacies->removeElement($candidacy)) {
             // set the owning side to null (unless already changed)
-            if ($candidacy->getAnnoncementId() === $this) {
-                $candidacy->setAnnoncementId(null);
+            if ($candidacy->getAnnouncementId() === $this) {
+                $candidacy->setAnnouncementId(null);
             }
         }
 

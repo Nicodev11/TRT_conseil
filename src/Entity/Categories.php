@@ -18,12 +18,12 @@ class Categories
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'category_id', targetEntity: Annoncement::class)]
-    private Collection $annoncements;
+    #[ORM\OneToMany(mappedBy: 'category_id', targetEntity: Announcement::class)]
+    private Collection $announcements;
 
     public function __construct()
     {
-        $this->annoncements = new ArrayCollection();
+        $this->announcements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -44,29 +44,29 @@ class Categories
     }
 
     /**
-     * @return Collection<int, Annoncement>
+     * @return Collection<int, Announcement>
      */
-    public function getAnnoncements(): Collection
+    public function getAnnouncements(): Collection
     {
-        return $this->annoncements;
+        return $this->announcements;
     }
 
-    public function addAnnoncement(Annoncement $annoncement): self
+    public function addAnnouncement(Announcement $announcement): self
     {
-        if (!$this->annoncements->contains($annoncement)) {
-            $this->annoncements->add($annoncement);
-            $annoncement->setCategoryId($this);
+        if (!$this->announcements->contains($announcement)) {
+            $this->announcements->add($announcement);
+            $announcement->setCategoryId($this);
         }
 
         return $this;
     }
 
-    public function removeAnnoncement(Annoncement $annoncement): self
+    public function removeAnnouncement(Announcement $announcement): self
     {
-        if ($this->annoncements->removeElement($annoncement)) {
+        if ($this->announcements->removeElement($announcement)) {
             // set the owning side to null (unless already changed)
-            if ($annoncement->getCategoryId() === $this) {
-                $annoncement->setCategoryId(null);
+            if ($announcement->getCategoryId() === $this) {
+                $announcement->setCategoryId(null);
             }
         }
 
