@@ -126,7 +126,7 @@ class Company
         return $this->annoncements;
     }
 
-    public function addAnnoncement(Annoncement $annoncement): self
+    public function addAnnoncement(Announcement $annoncement): self
     {
         if (!$this->annoncements->contains($annoncement)) {
             $this->annoncements->add($annoncement);
@@ -136,7 +136,7 @@ class Company
         return $this;
     }
 
-    public function removeAnnoncement(Annoncement $annoncement): self
+    public function removeAnnoncement(Announcement $annoncement): self
     {
         if ($this->annoncements->removeElement($annoncement)) {
             // set the owning side to null (unless already changed)
