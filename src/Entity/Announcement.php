@@ -23,14 +23,11 @@ class Announcement
     #[ORM\JoinColumn(nullable: false)]
     private ?Categories $category_id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'announcements')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Company $company_id = null;
 
     #[ORM\Column]
@@ -40,13 +37,18 @@ class Announcement
     private ?float $salary = null;
 
     #[ORM\Column]
-    private ?bool $is_valided = null;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?bool $is_valided = false;
 
     #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\OneToMany(mappedBy: 'announcement_id', targetEntity: Candidacies::class)]
     private Collection $candidacies;
+
+    #[ORM\ManyToOne(inversedBy: 'announcements')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Contract $contract_id = null;
 
     public function __construct()
     {
@@ -79,18 +81,6 @@ class Announcement
     public function setCategoryId(?Categories $category_id): self
     {
         $this->category_id = $category_id;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
 
         return $this;
     }
@@ -148,7 +138,7 @@ class Announcement
         return $this->is_valided;
     }
 
-    public function setIsValided(bool $is_valided): self
+    public function setIsValided(?bool $is_valided): self
     {
         $this->is_valided = $is_valided;
 
@@ -193,6 +183,18 @@ class Announcement
                 $candidacy->setAnnouncementId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getContractId(): ?Contract
+    {
+        return $this->contract_id;
+    }
+
+    public function setContractId(?Contract $contract_id): self
+    {
+        $this->contract_id = $contract_id;
 
         return $this;
     }

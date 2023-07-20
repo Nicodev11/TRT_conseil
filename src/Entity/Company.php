@@ -33,12 +33,12 @@ class Company
     #[ORM\ManyToOne(inversedBy: 'company_id')]
     private ?Users $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'company_id', targetEntity: Annoncement::class)]
-    private Collection $annoncements;
+    #[ORM\OneToMany(mappedBy: 'company_id', targetEntity: Announcement::class)]
+    private Collection $announcements;
 
     public function __construct()
     {
-        $this->annoncements = new ArrayCollection();
+        $this->announcements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,25 +123,25 @@ class Company
      */
     public function getAnnoncements(): Collection
     {
-        return $this->annoncements;
+        return $this->announcements;
     }
 
-    public function addAnnoncement(Announcement $annoncement): self
+    public function addAnnoncement(Announcement $announcement): self
     {
-        if (!$this->annoncements->contains($annoncement)) {
-            $this->annoncements->add($annoncement);
-            $annoncement->setCompanyId($this);
+        if (!$this->announcements->contains($announcement)) {
+            $this->announcements->add($announcement);
+            $announcement->setCompanyId($this);
         }
 
         return $this;
     }
 
-    public function removeAnnoncement(Announcement $annoncement): self
+    public function removeAnnoncement(Announcement $announcement): self
     {
-        if ($this->annoncements->removeElement($annoncement)) {
+        if ($this->announcements->removeElement($announcement)) {
             // set the owning side to null (unless already changed)
-            if ($annoncement->getCompanyId() === $this) {
-                $annoncement->setCompanyId(null);
+            if ($announcement->getCompanyId() === $this) {
+                $announcement->setCompanyId(null);
             }
         }
 

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes annonces{% endblock %}
+
+{% block body %}
+    <h1>Mes annonces</h1>
+
+    <table class="table container">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Heures</th>
+                <th>Salaire</th>
+                <th>Statut</th>
+                <th>Date de création</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for announcement in announcements %}
+            <tr>
+                <td>{{ announcement.name }}</td>
+                <td>{{ announcement.hours }}</td>
+                <td>{{ announcement.salary }}</td>
+                <td>{{ announcement.isValided ? 'Validé' : 'En attente de validation' }}</td>
+                <td>{{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}</td>
+                <td>
+                    <a class="btn btn-warning" href="{{ path('announcement_show', {'id': announcement.id}) }}">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a class="btn btn-success" href="{{ path('announcement_edit', {'id': announcement.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('announcement_add') }}">Create new</a>
+{% endblock %}
