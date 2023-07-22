@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %} - TRT Conseil</title>
-        <meta http-equiv="Content-Security-Policy" content="
+
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %} - TRG Conseil</title>
+    <meta http-equiv="Content-Security-Policy" content="
         default-src 
             'self';
         script-src 
@@ -21,26 +22,39 @@
         img-src
             'self'
             https://cdn.jsdelivr.net;
-        ">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#000000">
-        <meta name="description" content="TRT Conseil est une agence de recrutement spécialisée dans l’hôtellerie et la restauration. Fondée en
+        " />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="TRG Conseil est une agence de recrutement spécialisée dans l’hôtellerie et la restauration. Fondée en
         2014, la société s’est agrandie au fil des ans et possède dorénavant plus de 12 centres dispersés aux
-        quatre coins de la France.">
+        quatre coins de la France." />
 
-        <!-- Feuille de Style -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-        {% block stylesheets %}{% endblock %}
-            {{ encore_entry_link_tags('app') }}
+    <!-- Feuille de Style -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    {% block stylesheets %}{% endblock %}
+    {{
+      encore_entry_link_tags("app")
+    }}
 
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
+    </script>
+    {% block javascripts %}
+    {{
+      encore_entry_script_tags("app")
+    }}
+    {% endblock %}
+</head>
+
+<header>{% include '_partials/_navigation.html.twig' %}</header>
+
+<body>
+    <main>{% block body %}{% endblock %}</main>
+</body>
+
+<footer>{% include '_partials/_footer.html.twig' %}</footer>
+
 </html>

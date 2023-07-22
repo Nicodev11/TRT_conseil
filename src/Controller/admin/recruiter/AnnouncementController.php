@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/recruteur', name: 'announcement_')]
 class AnnouncementController extends AbstractController
 {
-    #[Route('/', name: 'index', methods: ['GET'])]
+    #[Route('/mes-annonces', name: 'index', methods: ['GET'])]
     public function index(AnnouncementRepository $announcementRepository): Response
     {
         return $this->render('announcement/index.html.twig', [

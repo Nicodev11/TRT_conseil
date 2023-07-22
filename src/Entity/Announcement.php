@@ -50,6 +50,10 @@ class Announcement
     #[ORM\JoinColumn(nullable: false)]
     private ?Contract $contract_id = null;
 
+    #[ORM\ManyToOne(inversedBy: 'announcements')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $user_id = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
@@ -195,6 +199,18 @@ class Announcement
     public function setContractId(?Contract $contract_id): self
     {
         $this->contract_id = $contract_id;
+
+        return $this;
+    }
+
+    public function getUserId(): ?Users
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(?Users $user_id): self
+    {
+        $this->user_id = $user_id;
 
         return $this;
     }

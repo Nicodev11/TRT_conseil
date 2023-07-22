@@ -54,10 +54,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Candidacies $candidacies = null;
 
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Announcement::class, orphanRemoval: true)]
+    private Collection $announcements;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
         $this->company_id = new ArrayCollection();
+        $this->announcements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -240,6 +244,36 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCandidacies(?Candidacies $candidacies): self
     {
         $this->candidacies = $candidacies;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Announcement>
+     */
+    public function getAnnouncements(): Collection
+    {
+        return $this->announcements;
+    }
+
+    public function addAnnouncement(Announcement $announcement): self
+    {
+        if (!$this->announcements->contains($announcement)) {
+            $this->announcements->add($announcement);
+            $announcement->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnouncement(Announcement $announcement): self
+    {
+        if ($this->announcements->removeElement($announcement)) {
+            // set the owning side to null (unless already changed)
+            if ($announcement->getUserId() === $this) {
+                $announcement->setUserId(null);
+            }
+        }
 
         return $this;
     }
