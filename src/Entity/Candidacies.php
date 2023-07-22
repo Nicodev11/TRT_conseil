@@ -18,13 +18,9 @@ class Candidacies
     #[ORM\ManyToOne(inversedBy: 'candidacies')]
     private ?Announcement $annoncement_id = null;
 
-    #[ORM\OneToMany(mappedBy: 'candidacies', targetEntity: Users::class)]
-    private Collection $User_id;
-
-    public function __construct()
-    {
-        $this->User_id = new ArrayCollection();
-    }
+    #[ORM\OneToOne(inversedBy: 'candidacies', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $candidacie = null;
 
     public function getId(): ?int
     {
@@ -43,33 +39,16 @@ class Candidacies
         return $this;
     }
 
-    /**
-     * @return Collection<int, Users>
-     */
-    public function getUserId(): Collection
+    public function getCandidacie(): ?Users
     {
-        return $this->User_id;
+        return $this->candidacie;
     }
 
-    public function addUserId(Users $userId): self
+    public function setCandidacie(Users $candidacie): self
     {
-        if (!$this->User_id->contains($userId)) {
-            $this->User_id->add($userId);
-            $userId->setCandidacies($this);
-        }
+        $this->candidacie = $candidacie;
 
         return $this;
     }
-
-    public function removeUserId(Users $userId): self
-    {
-        if ($this->User_id->removeElement($userId)) {
-            // set the owning side to null (unless already changed)
-            if ($userId->getCandidacies() === $this) {
-                $userId->setCandidacies(null);
-            }
-        }
-
-        return $this;
-    }
+   
 }

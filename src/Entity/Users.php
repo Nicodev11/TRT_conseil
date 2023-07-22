@@ -50,12 +50,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Company::class)]
     private Collection $company_id;
 
-    #[ORM\ManyToOne(inversedBy: 'User_id')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Candidacies $candidacies = null;
-
     #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Announcement::class, orphanRemoval: true)]
     private Collection $announcements;
+
+    #[ORM\OneToOne(mappedBy: 'candidacie', cascade: ['persist', 'remove'])]
+    private ?Candidacies $candidacies = null;
 
     public function __construct()
     {
@@ -236,18 +235,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCandidacies(): ?Candidacies
-    {
-        return $this->candidacies;
-    }
-
-    public function setCandidacies(?Candidacies $candidacies): self
-    {
-        $this->candidacies = $candidacies;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Announcement>
      */
@@ -274,6 +261,23 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
                 $announcement->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCandidacies(): ?Candidacies
+    {
+        return $this->candidacies;
+    }
+
+    public function setCandidacies(Candidacies $candidacies): self
+    {
+        // set the owning side of the relation if necessary
+        if ($candidacies->getCandidacie() !== $this) {
+            $candidacies->setCandidacie($this);
+        }
+
+        $this->candidacies = $candidacies;
 
         return $this;
     }
