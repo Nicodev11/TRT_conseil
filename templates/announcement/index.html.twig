@@ -5,11 +5,19 @@
 {%block body %}
 
 <div class="container-fluid">
-    <h1 class="text-center my-2">Mes annonces</h1>
+    
 
-    <a class="btn btn-success my-3 ms-2" href="{{ path('announcement_add') }}">
-        <i class="bi bi-plus-circle"></i> Nouvelle annonce 
-    </a>
+    {% if is_granted('ROLE_RECRUITER', 'ROLE_ADMIN') %}
+        <h1 class="text-center my-2">Mes annonces</h1>
+        <a class="btn btn-success my-3 ms-2" href="{{ path('announcement_add') }}">
+            <i class="bi bi-plus-circle"></i> Nouvelle annonce 
+        </a>
+    {% endif %}
+
+    {% if is_granted('ROLE_CONSULTANT') %}
+        <h1 class="text-center my-2">Annonces en attente de validation</h1>
+    {% endif %}
+    
 
     <table class="table table-striped align-middle">
         <thead>
@@ -24,28 +32,36 @@
         </thead>
         <tbody>
             {% for announcement in announcements %}
-            {{ dump(announcement) }}
             <tr>
                 <td>{{ announcement.name }}</td>
                 <td>{{ announcement.hours }}</td>
                 <td>{{ announcement.salary }}</td>
                 <td> 
                     {% if announcement.isValided == true %}
-                        <i class="bi bi-check-circle-fill"> En ligne</i> 
+                        <i class="bi bi-check-circle-fill text-success"> En ligne</i> 
                     {% elseif announcement.isValided == false %}
-                        <i class="bi bi-hourglass-split"> En attente de confirmation</i>  
+                        <i class="bi bi-hourglass-split text-primary"> En attente de confirmation</i>  
                     {% endif %}
                 </td>
                 <td>
                     {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
                 </td>
                 <td>
-                    <a class="btn btn-warning" href="{{ path('announcement_show', { id: announcement.id }) }}">
+                    <a class="btn btn-warning" href="{{ path('announcement_show', { name: announcement.name , id: announcement.id }) }}">
                         <i class="bi bi-eye"></i>
                     </a>
-                    <a class="btn btn-success" href="{{ path('announcement_edit', { id: announcement.id }) }}">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
+                    {% if is_granted('ROLE_RECRUITER') %}
+                        <a class="btn btn-success" href="{{ path('announcement_edit', { id: announcement.id }) }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_CONSULTANT') %}
+                        <a class="btn btn-success" href="{{ path('announcement_consultant_edit', { id: announcement.id }) }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    {% endif %}
+
                 </td>
             </tr>
             {% else %}

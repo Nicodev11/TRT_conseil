@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\admin\recruiter;
+namespace App\Controller\admin\consultant;
 
 use App\Entity\Announcement;
 use App\Form\AnnouncementType;
@@ -11,34 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/recruteur', name: 'announcement_')]
+#[Route('/admin/consultant', name: 'announcement_consultant')]
 class AnnouncementController extends AbstractController
 {
-    #[Route('/mes-annonces', name: 'index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(AnnouncementRepository $announcementRepository): Response
     {
         return $this->render('announcement/index.html.twig', [
-            'announcements' => $announcementRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/ajout', name: 'add', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $announcement = new Announcement();
-        $form = $this->createForm(AnnouncementType::class, $announcement);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($announcement);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('announcement_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('announcement/new.html.twig', [
-            'announcement' => $announcement,
-            'form' => $form,
+            'announcements' => $announcementRepository->findBy(
+                ['is_valided' => false],
+                ['created_at' => 'DESC']
+            ),
         ]);
     }
 

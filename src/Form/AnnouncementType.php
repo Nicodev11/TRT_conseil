@@ -3,10 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Announcement;
-use App\Entity\Contract;
 use App\Repository\CategoriesRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,6 +16,12 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class AnnouncementType extends AbstractType
 {
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -44,7 +50,8 @@ class AnnouncementType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'attr' => [
-                    'class' => 'form-control my-2'
+                    'class' => 'form-control my-2',
+                    "rows" => "10"
                 ]
             ])
             ->add('hours', NumberType::class, [
@@ -74,8 +81,21 @@ class AnnouncementType extends AbstractType
                         'maxMessage' => 'Le salaire doit être inférieur à 100000',
                     ])
                 ]
-            ])  
-        ;
+            ]);
+
+            $is_consultant = $this->security->isGranted('ROLE_CONSULTANT');
+
+            if ($is_consultant) {
+                $builder->add('is_valided', CheckboxType::class, [
+                    'label' => ' Valider et mettre en ligne l\'annonce',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'mx-2 form-check-input',
+                        'role' => 'switch',
+                        'type' => 'checkbox'
+                    ]
+                ]);
+            }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -51,8 +51,13 @@ class Announcement
     private ?Contract $contract_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'announcements')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Users $user_id = null;
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 
     public function __construct()
     {
