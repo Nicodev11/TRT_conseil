@@ -6,21 +6,19 @@ use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use PHPUnit\Util\Json;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Json as ConstraintsJson;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer', unique: true)]
     private ?int $id = null;
-
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $uuid = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -38,10 +36,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $fistname = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $is_verified = null;
+    private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reset_token = null;
@@ -58,6 +53,21 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'candidacie', cascade: ['persist', 'remove'])]
     private ?Candidacies $candidacies = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
+    #[ORM\Column(length: 10)]
+    private ?string $phone = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $zip = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $adress = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
@@ -70,14 +80,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getUuid(): ?string
+    public function setId(string $id): self
     {
-        return $this->uuid;
-    }
-
-    public function setUuid(string $uuid): self
-    {
-        $this->uuid = $uuid;
+        $this->id = $id;
 
         return $this;
     }
@@ -89,7 +94,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->uuid;
+        return (string) $this->id;
     }
 
     /**
@@ -159,26 +164,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFistname(): ?string
+    public function getfirstname(): ?string
     {
-        return $this->fistname;
+        return $this->firstname;
     }
 
-    public function setFistname(string $fistname): self
+    public function setfirstname(string $firstname): self
     {
-        $this->fistname = $fistname;
-
-        return $this;
-    }
-
-    public function isIsVerified(): ?bool
-    {
-        return $this->is_verified;
-    }
-
-    public function setIsVerified(?bool $is_verified): self
-    {
-        $this->is_verified = $is_verified;
+        $this->firstname = $firstname;
 
         return $this;
     }
@@ -280,6 +273,59 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->candidacies = $candidacies;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getZip(): ?string
+    {
+        return $this->zip;
+    }
+
+    public function setZip(string $zip): self
+    {
+        $this->zip = $zip;
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(string $adress): self
+    {
+        $this->adress = $adress;
 
         return $this;
     }

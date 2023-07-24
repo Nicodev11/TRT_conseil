@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/recruteur', name: 'announcement_')]
+#[Route('/recruteur', name: 'announcement_recruiter_')]
 class AnnouncementController extends AbstractController
 {
     #[Route('/mes-annonces', name: 'index', methods: ['GET'])]
@@ -33,7 +33,7 @@ class AnnouncementController extends AbstractController
             $entityManager->persist($announcement);
             $entityManager->flush();
 
-            return $this->redirectToRoute('announcement_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('announcement_recruiter_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('announcement/new.html.twig', [
@@ -63,7 +63,7 @@ class AnnouncementController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('announcement_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('announcement_recruiter_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('announcement/edit.html.twig', [
@@ -80,6 +80,6 @@ class AnnouncementController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('announcement_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('announcement_recruiter_index', [], Response::HTTP_SEE_OTHER);
     }
 }

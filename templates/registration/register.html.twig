@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <section class="container w-75 my-5">
+        <h1 class="h3 title my-3 font-weight-normal text-center">Inscription</h1>
+        <div class="row">
+            <div class="col">
+                {{ form_start(registrationForm) }}
+    
+                <fieldset class="mb-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(registrationForm.lastname, {label: 'Nom'}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(registrationForm.firstname, {label: 'Prénom'}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(registrationForm.adress, {label: 'Adresse'}) }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form_row(registrationForm.zip, {label: 'Code postal'}) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_row(registrationForm.city, {label: 'Ville'}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(registrationForm.phone, {label: 'Téléphone'}) }}
+                    </div>
+
+                </fieldset>
+                <fieldset class="mb-3">
+                
+                {{form_row(registrationForm.email)}}
+                {{ form_row(registrationForm.plainPassword, {label: 'Mot de passe'}) }}
+                
+                </fieldset>
+                {{ form_row(registrationForm.agreeTerms, {label : 'J\'accepte que mes données personnelles soient conservées par le site'})}}
+                <button type="submit" class="btn btn-warning my-3">S'inscrire</button>
+    
+                {{ form_end(registrationForm) }}
+                
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('registration') }}
+{% endblock %}

@@ -9,7 +9,7 @@
 
     {% if is_granted('ROLE_RECRUITER', 'ROLE_ADMIN') %}
         <h1 class="text-center my-2">Mes annonces</h1>
-        <a class="btn btn-success my-3 ms-2" href="{{ path('announcement_add') }}">
+        <a class="btn btn-success my-3 ms-2" href="{{ path('announcement_recruiter_add') }}">
             <i class="bi bi-plus-circle"></i> Nouvelle annonce 
         </a>
     {% endif %}
@@ -47,16 +47,20 @@
                     {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
                 </td>
                 <td>
-                    <a class="btn btn-warning" href="{{ path('announcement_show', { name: announcement.name , id: announcement.id }) }}">
-                        <i class="bi bi-eye"></i>
-                    </a>
+                    
                     {% if is_granted('ROLE_RECRUITER') %}
-                        <a class="btn btn-success" href="{{ path('announcement_edit', { id: announcement.id }) }}">
+                        <a class="btn btn-warning" href="{{ path('announcement_recruiter_show', { name: announcement.name , id: announcement.id }) }}">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a class="btn btn-success" href="{{ path('announcement_recruiter_edit', { id: announcement.id }) }}">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                     {% endif %}
 
                     {% if is_granted('ROLE_CONSULTANT') %}
+                        <a class="btn btn-warning" href="{{ path('announcement_consultant_show', { name: announcement.name , id: announcement.id }) }}">
+                            <i class="bi bi-eye"></i>
+                        </a>
                         <a class="btn btn-success" href="{{ path('announcement_consultant_edit', { id: announcement.id }) }}">
                             <i class="bi bi-pencil-square"></i>
                         </a>

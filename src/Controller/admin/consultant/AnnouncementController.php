@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/consultant', name: 'announcement_consultant')]
+#[Route('/consultant', name: 'announcement_consultant_')]
 class AnnouncementController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -46,7 +46,7 @@ class AnnouncementController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('announcement_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('announcement_consultant_index', [], Response::HTTP_SEE_OTHER); 
         }
 
         return $this->render('announcement/edit.html.twig', [
@@ -63,6 +63,6 @@ class AnnouncementController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('announcement_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('announcement_consultant_index', [], Response::HTTP_SEE_OTHER);
     }
 }
