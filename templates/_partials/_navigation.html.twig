@@ -27,8 +27,8 @@
         </a>
         <ul class="dropdown-menu">
           {% if is_granted('ROLE_CONSULTANT') %}
-            <li><a class="dropdown-item" href="{{path('announcement_consultant_pending_offers')}}">Offres en attente</a></li>
-            <li><a class="dropdown-item" href="{{path('announcement_consultant_validated_offers')}}">Offres validés</a></li>
+            <li><a class="dropdown-item" href="{{path('consultant_announcement_pending_offers')}}">Offres en attente</a></li>
+            <li><a class="dropdown-item" href="{{path('consultant_announcement_validated_offers')}}">Offres validés</a></li>
             <li><hr class="dropdown-divider"></li>
           {% endif %}
           {% if is_granted('ROLE_RECRUITER') %}

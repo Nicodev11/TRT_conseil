@@ -4,9 +4,7 @@ namespace App\Form;
 
 use App\Entity\Announcement;
 use App\Repository\CategoriesRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,11 +14,6 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class AnnouncementType extends AbstractType
 {
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -62,7 +55,7 @@ class AnnouncementType extends AbstractType
                 'constraints' => [
                     new Range([
                         'min' => 1,
-                        'max' => 35,
+                        'max' => 45,
                         'minMessage' => 'Le nombre d\'heures doit être supérieur à 1',
                         'maxMessage' => 'Le nombre d\'heures doit être inférieur à 35',
                     ])
@@ -82,20 +75,6 @@ class AnnouncementType extends AbstractType
                     ])
                 ]
             ]);
-
-            $is_consultant = $this->security->isGranted('ROLE_CONSULTANT');
-
-            if ($is_consultant) {
-                $builder->add('is_valided', CheckboxType::class, [
-                    'label' => ' Valider et mettre en ligne l\'annonce',
-                    'required' => false,
-                    'attr' => [
-                        'class' => 'mx-2 form-check-input',
-                        'role' => 'switch',
-                        'type' => 'checkbox'
-                    ]
-                ]);
-            }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

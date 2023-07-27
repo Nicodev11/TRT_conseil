@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/consultant', name: 'announcement_consultant_')]
+#[Route('/consultant', name: 'consultant_announcement_')]
 class AnnouncementController extends AbstractController
 {
     #[Route("/", name: 'index', methods: ['GET'])]
@@ -54,7 +54,7 @@ class AnnouncementController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'validate', methods: ['POST'])]
+    #[Route('validate/{id}', name: 'validate', methods: ['POST'])]
     public function validate(Request $request, Announcement $announcement, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('validate'.$announcement->getId(), $request->request->get('_token'))) {
@@ -67,7 +67,7 @@ class AnnouncementController extends AbstractController
 
         $this->addFlash('danger', 'Une erreur est survenue lors de la validation de l\'annonce');
 
-        return $this->redirectToRoute('announcement_consultant_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('consultant_announcement_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
@@ -82,7 +82,7 @@ class AnnouncementController extends AbstractController
 
         $this->addFlash('danger', 'Une erreur est survenue lors de la suppression de l\'annonce');
         
-        return $this->redirectToRoute('announcement_consultant_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('consultant_announcement_index', [], Response::HTTP_SEE_OTHER);
     }
 
 }

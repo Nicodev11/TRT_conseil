@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle annonce{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center my-5">Créer une annonce</h1>
+      {{ include('recruiter/announcement/_form.html.twig') }}
+    </div>
+  </div>
+
+  <a href="{{ path('recruiter_announcement_index') }}">Retour</a>
+
+{% endblock %}

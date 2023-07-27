@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'annonce{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Modifier l'annonce</h1>
+
+    {{ include('recruiter/announcement/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    <a class="btn btn-primary" href="{{ path('recruiter_announcement_index') }}"><i class="bi bi-backspace"> Retour</i></a>
+    {{ include('recruiter/announcement/_delete_form.html.twig') }}
+
+    
+</div>
+    
+{% endblock %}

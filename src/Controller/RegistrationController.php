@@ -51,7 +51,7 @@ class RegistrationController extends AbstractController
                     ->from(new Address('contact@trg-conseil.com', 'TRG Conseil'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('pages/registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
 
@@ -64,7 +64,7 @@ class RegistrationController extends AbstractController
             $this->addFlash('danger', 'Une erreur est survenue lors de l\'inscription');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('pages/registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }

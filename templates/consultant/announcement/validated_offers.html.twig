@@ -29,7 +29,7 @@
           {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
         </td>
         <td>
-          <a
+        {#}  <a
             href="{{
               path('company_show', { id: announcement.company.id })
             }}"
@@ -37,26 +37,19 @@
           >
             {{ announcement.company.name }}
           </a>
+        {#}
         </td>
         <td>
           <a
             class="btn btn-warning"
             href="{{
-              path('announcement_consultant_show', {
+              path('consultant_announcement_show', {
                 name: announcement.name,
                 id: announcement.id
               })
             }}"
           >
             <i class="bi bi-eye"></i>
-          </a>
-          <a
-            class="btn btn-success"
-            href="{{
-              path('announcement_consultant_edit', { id: announcement.id })
-            }}"
-          >
-            <i class="bi bi-pencil-square"></i>
           </a>
         </td>
       </tr>
