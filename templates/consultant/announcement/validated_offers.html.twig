@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %} {% block title %}Mes annonces{% endblock %}
+{%block body %}
+
+<div class="container-fluid">
+  <h1 class="text-center my-5">Annonces validées</h1>
+
+  <table class="table table-striped align-middle container">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Heures</th>
+        <th>Salaire</th>
+        <th>Statut</th>
+        <th>Créé le</th>
+        <th>Entreprise</th>
+        <th>actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for announcement in announcements %}
+      <tr>
+        <td>{{ announcement.name }}</td>
+        <td>{{ announcement.hours }}</td>
+        <td>{{ announcement.salary }}</td>
+        <td>
+          <i class="bi bi-check-circle-fill text-success"> En ligne</i> 
+        </td>
+        <td>
+          {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
+        </td>
+        <td>
+          <a
+            href="{{
+              path('company_show', { id: announcement.company.id })
+            }}"
+            class="text-decoration-none"
+          >
+            {{ announcement.company.name }}
+          </a>
+        </td>
+        <td>
+          <a
+            class="btn btn-warning"
+            href="{{
+              path('announcement_consultant_show', {
+                name: announcement.name,
+                id: announcement.id
+              })
+            }}"
+          >
+            <i class="bi bi-eye"></i>
+          </a>
+          <a
+            class="btn btn-success"
+            href="{{
+              path('announcement_consultant_edit', { id: announcement.id })
+            }}"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="9" class="text-center fw-bold my-2 text-danger">Il n'y a pas d'annonces validées</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

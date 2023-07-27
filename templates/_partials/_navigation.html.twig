@@ -1,30 +1,58 @@
-<div class="container-fluid">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <div class="col-md-3 mb-2 mb-md-0">
-      <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-       <img src="{{asset('assets/img/logo_bg_white.png')}}" alt="logo">
+<header class="p-3 mb-3 border-bottom">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+        <img src="{{asset('assets/img/logo_bg_white.png')}}" alt="" srcset="">
       </a>
-    </div>
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="#" class="nav-link px-2 link-secondary fs-5">Accueil</a></li>
-      <li class="nav-item dropdown fs-5">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Nos offres
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 mx-auto mb-md-0">
+        <li><a href="#" class="nav-link px-2 link-secondary fs-5">Accueil</a></li>
+        <li><a href="#" class="nav-link px-2 link-body-emphasis fs-5">Nos offres</a></li>
+        <li><a href="#" class="nav-link px-2 link-body-emphasis fs-5">Nous connaître</a></li>
+        <li><a href="#" class="nav-link px-2 link-body-emphasis fs-5">Contact</a></li>
+      </ul>
+
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+      </form>
+
+      {% if app.user %}
+      <div class="dropdown text-end">
+        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if app.user.genre == 'Monsieur' %}
+          <img src="{{asset('assets/img/avatar-male.png')}}" alt="mdo" width="50" height="50" class="rounded-circle">
+          {% else %}
+          <img src="{{asset('assets/img/avatar-female.png')}}" alt="mdo" width="50" height="50" class="rounded-circle">
+          {% endif %}
         </a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item fs-5" href="#">Hôtellerie</a></li>
+          {% if is_granted('ROLE_CONSULTANT') %}
+            <li><a class="dropdown-item" href="{{path('announcement_consultant_pending_offers')}}">Offres en attente</a></li>
+            <li><a class="dropdown-item" href="{{path('announcement_consultant_validated_offers')}}">Offres validés</a></li>
+            <li><hr class="dropdown-divider"></li>
+          {% endif %}
+          {% if is_granted('ROLE_RECRUITER') %}
+            <li><a class="dropdown-item" href="#">Ajouter une annonce</a></li>
+            <li><a class="dropdown-item" href="#">Mes annonces</a></li>
+            <li><hr class="dropdown-divider"></li>
+          {% endif %}
+          {% if is_granted('ROLE_USER') %}
+            <li><a class="dropdown-item" href="#">Mes candidatures</a></li>
+          {% endif %}
+          <li><a class="dropdown-item" href="#">Paramètres</a></li>
+          <li><a class="dropdown-item" href="#">Profil</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item fs-5" href="#">Restauration</a></li>
-          
+          <li><a class="dropdown-item" href="{{path('app_logout')}}">Se déconnecter</a></li>
         </ul>
-      </li>
-      <li><a href="#" class="nav-link px-2 fs-5">A propos de nous</a></li>
-      <li><a href="#" class="nav-link px-2 fs-5">Contact</a></li>
-    </ul>
-
-    <div class="col-md-3 col-md-12 col-lg-3 text-end">
-      <a href="{{path('app_login')}}" class="btn btn-outline-primary me-2">Se connecter</a>
-      <a href="{{path('app_register')}}" class="btn btn-primary">S'enregistrer</a>
+      </div>
+      {% else %}
+      <a href="{{ path('app_login') }}"
+        ><button type="button" class="btn btn-outline-primary">
+          Connexion
+        </button></a
+      >
+      {% endif %}
     </div>
-  </header>
-</div>
+  </div>
+
+</header>

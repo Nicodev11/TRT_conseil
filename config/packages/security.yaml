@@ -42,6 +42,10 @@ security:
         - { path: ^/consultant/, roles: ROLE_CONSULTANT }
         - { path: ^/recruteur/, roles: ROLE_RECRUITER }
 
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_CONSULTANT
+        ROLE_CONSULTANT: ROLE_RECRUITER
+
 when@test:
     security:
         password_hashers:

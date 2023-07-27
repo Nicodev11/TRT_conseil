@@ -19,6 +19,7 @@ class UsersFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $admin = new Users();
+        $admin->setGenre('Monsieur');
         $admin->setEmail('admin@trg-conseil.fr');
         $admin->setLastname('Andres');
         $admin->setFirstname('Julian');
@@ -33,6 +34,7 @@ class UsersFixtures extends Fixture
         $manager->persist($admin);
 
         $consultant = new Users();
+        $consultant->setGenre('Monsieur');
         $consultant->setEmail('consultant@trg-conseil.fr');
         $consultant->setLastname('Masselin');
         $consultant->setFirstname('Manuel');
@@ -47,6 +49,7 @@ class UsersFixtures extends Fixture
         $manager->persist($consultant);
 
         $recruiter = new Users();
+        $recruiter->setGenre('Monsieur');
         $recruiter->setEmail('recruiter@trg-conseil.fr');
         $recruiter->setLastname('Bouvier');
         $recruiter->setFirstname('Nicolas');

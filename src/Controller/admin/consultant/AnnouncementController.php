@@ -14,12 +14,29 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/consultant', name: 'announcement_consultant_')]
 class AnnouncementController extends AbstractController
 {
-    #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(AnnouncementRepository $announcementRepository): Response
+    #[Route("/", name: 'index', methods: ['GET'])]
+    public function index(): Response
     {
-        return $this->render('announcement/index.html.twig', [
+        return $this->render('consultant/announcement/pending_offers.html.twig');
+    }
+
+    #[Route("/liste-dattente", name: 'pending_offers', methods: ['GET'])]
+    public function pendingOffers(AnnouncementRepository $announcementRepository): Response
+    {
+        return $this->render('consultant/announcement/pending_offers.html.twig', [
             'announcements' => $announcementRepository->findBy(
                 ['is_valided' => false],
+                ['created_at' => 'ASC']
+            ),
+        ]);
+    }
+
+    #[Route("/offres-validees", name: 'validated_offers', methods: ['GET'])]
+    public function validatedOffers(AnnouncementRepository $announcementRepository): Response
+    {
+        return $this->render('consultant/announcement/validated_offers.html.twig', [
+            'announcements' => $announcementRepository->findBy(
+                ['is_valided' => true],
                 ['created_at' => 'DESC']
             ),
         ]);
@@ -31,28 +48,26 @@ class AnnouncementController extends AbstractController
 
         $contractName = $announcement->getContractId()->getName();
 
-        return $this->render('announcement/show.html.twig', [
+        return $this->render('consultant/announcement/show.html.twig', [
             'announcement' => $announcement,
             'contractName' => $contractName,
         ]);
     }
 
-    #[Route('/edition/{id}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Announcement $announcement, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'validate', methods: ['POST'])]
+    public function validate(Request $request, Announcement $announcement, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(AnnouncementType::class, $announcement);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->isCsrfTokenValid('validate'.$announcement->getId(), $request->request->get('_token'))) {
+            $announcement->setIsValided(true);
+            $entityManager->persist($announcement);
             $entityManager->flush();
 
-            return $this->redirectToRoute('announcement_consultant_index', [], Response::HTTP_SEE_OTHER); 
-        }
+            $this->addFlash('success', 'L\'annonce a bien été validée');
+        } 
 
-        return $this->render('announcement/edit.html.twig', [
-            'announcement' => $announcement,
-            'form' => $form,
-        ]);
+        $this->addFlash('danger', 'Une erreur est survenue lors de la validation de l\'annonce');
+
+        return $this->redirectToRoute('announcement_consultant_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
@@ -61,8 +76,13 @@ class AnnouncementController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$announcement->getId(), $request->request->get('_token'))) {
             $entityManager->remove($announcement);
             $entityManager->flush();
+
+            $this->addFlash('success', 'L\'annonce a bien été supprimée');
         }
 
+        $this->addFlash('danger', 'Une erreur est survenue lors de la suppression de l\'annonce');
+        
         return $this->redirectToRoute('announcement_consultant_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

@@ -35,7 +35,10 @@
 <header>{% include '_partials/_navigation.html.twig' %}</header>
 
 <body>
-    <main>{% block body %}{% endblock %}</main>
+    <main>
+        {% include "_partials/_flash.html.twig" %}
+        {% block body %}{% endblock %}
+    </main>
 </body>
 
 <footer>{% include '_partials/_footer.html.twig' %}</footer>
