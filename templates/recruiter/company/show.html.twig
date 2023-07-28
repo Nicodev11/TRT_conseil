@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entreprise{% endblock %}
+
+{% block body %}
+    <h1>L'entreprise</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ company.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ company.name }}</td>
+            </tr>
+            <tr>
+                <th>Adress</th>
+                <td>{{ company.adress }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ company.city }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ company.email }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ company.phone }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('recruiter_company_index') }}">back to list</a>
+
+    <a href="{{ path('recruiter_company_edit', {'id': company.id}) }}">edit</a>
+
+    {{ include('recruiter/company/_delete_form.html.twig') }}
+{% endblock %}

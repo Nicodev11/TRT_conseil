@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon entreprise{% endblock %}
+
+{% block body %}
+    <h1>Modifier mon entreprise</h1>
+
+    {{ include('recruiter/company/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    <a class="btn btn-warning" href="{{ path('recruiter_announcement_index') }}">Retour</a>
+
+    {{ include('recruiter/company/_delete_form.html.twig') }}
+{% endblock %}

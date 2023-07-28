@@ -44,9 +44,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Company::class)]
-    private Collection $company_id;
-
     #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Announcement::class, orphanRemoval: true)]
     private Collection $announcements;
 
@@ -71,11 +68,22 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 15)]
     private ?string $genre = null;
 
+    #[ORM\OneToOne(mappedBy: 'users', cascade: ['persist', 'remove'])]
+    private ?Company $company = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Announcement::class)]
+    private Collection $announcementUser;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
-        $this->company_id = new ArrayCollection();
         $this->announcements = new ArrayCollection();
+        $this->announcementUser = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 
     public function getId(): ?int
@@ -202,63 +210,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Company>
-     */
-    public function getCompanyId(): Collection
-    {
-        return $this->company_id;
-    }
-
-    public function addCompanyId(Company $companyId): self
-    {
-        if (!$this->company_id->contains($companyId)) {
-            $this->company_id->add($companyId);
-            $companyId->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompanyId(Company $companyId): self
-    {
-        if ($this->company_id->removeElement($companyId)) {
-            // set the owning side to null (unless already changed)
-            if ($companyId->getUsers() === $this) {
-                $companyId->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Announcement>
      */
     public function getAnnouncements(): Collection
     {
         return $this->announcements;
-    }
-
-    public function addAnnouncement(Announcement $announcement): self
-    {
-        if (!$this->announcements->contains($announcement)) {
-            $this->announcements->add($announcement);
-            $announcement->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnouncement(Announcement $announcement): self
-    {
-        if ($this->announcements->removeElement($announcement)) {
-            // set the owning side to null (unless already changed)
-            if ($announcement->getUserId() === $this) {
-                $announcement->setUserId(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getCandidacies(): ?Candidacies
@@ -342,4 +298,52 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(Company $company): self
+    {
+        // set the owning side of the relation if necessary
+        if ($company->getUsers() !== $this) {
+            $company->setUsers($this);
+        }
+
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Announcement>
+     */
+    public function getAnnouncementUser(): Collection
+    {
+        return $this->announcementUser;
+    }
+
+    public function addAnnouncementUser(Announcement $announcementUser): self
+    {
+        if (!$this->announcementUser->contains($announcementUser)) {
+            $this->announcementUser->add($announcementUser);
+            $announcementUser->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnouncementUser(Announcement $announcementUser): self
+    {
+        if ($this->announcementUser->removeElement($announcementUser)) {
+            // set the owning side to null (unless already changed)
+            if ($announcementUser->getUser() === $this) {
+                $announcementUser->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

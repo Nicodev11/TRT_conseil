@@ -54,7 +54,7 @@ class AnnouncementController extends AbstractController
         ]);
     }
 
-    #[Route('validate/{id}', name: 'validate', methods: ['POST'])]
+    #[Route('validation/{id}', name: 'validate', methods: ['POST'])]
     public function validate(Request $request, Announcement $announcement, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('validate'.$announcement->getId(), $request->request->get('_token'))) {

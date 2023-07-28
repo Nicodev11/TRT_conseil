@@ -6,21 +6,20 @@
 
 <div class="container-fluid">
 
-  <h1 class="text-center my-2">Mes annonces</h1>
+  <h1 class="text-center my-2">Mes offres d'emploi</h1>
 
   <a class="btn btn-success my-3 ms-2" href="{{ path('recruiter_announcement_add') }}">
     <i class="bi bi-plus-circle"></i> Nouvelle annonce
   </a>
 
-  <h1 class="text-center my-2">Mes annonces</h1>
-
-  <table class="table table-striped align-middle">
+  <table class="table table-striped align-middle container mt-3">
     <thead>
       <tr>
         <th>Nom</th>
         <th>Heures</th>
         <th>Salaire</th>
         <th>Statut</th>
+        <th>Entreprise</th>
         <th>Créé le</th>
         <th>actions</th>
       </tr>
@@ -38,6 +37,7 @@
           <i class="bi bi-hourglass-split text-primary"> En attente de confirmation</i>
           {% endif %}
         </td>
+        <td>{{ announcement.company.name }}</td>
         <td>
           {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
         </td>

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
@@ -18,8 +19,14 @@ class Company
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
     #[ORM\Column(length: 255)]
     private ?string $adress = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $zip = null;
 
     #[ORM\Column(length: 255)]
     private ?string $city = null;
@@ -30,15 +37,19 @@ class Company
     #[ORM\Column(length: 10)]
     private ?string $phone = null;
 
-    #[ORM\ManyToOne(inversedBy: 'company_id')]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Announcement::class)]
+    private Collection $announcement;
+
+    #[ORM\OneToOne(inversedBy: 'company', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Users $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'company_id', targetEntity: Announcement::class)]
-    private Collection $announcements;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $website = null;
 
     public function __construct()
     {
-        $this->announcements = new ArrayCollection();
+        $this->announcement = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -58,6 +69,18 @@ class Company
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function getAdress(): ?string
     {
         return $this->adress;
@@ -66,6 +89,18 @@ class Company
     public function setAdress(string $adress): self
     {
         $this->adress = $adress;
+
+        return $this;
+    }
+
+    public function getZip(): ?string
+    {
+        return $this->zip;
+    }
+
+    public function setZip(string $zip): self
+    {
+        $this->zip = $zip;
 
         return $this;
     }
@@ -106,44 +141,56 @@ class Company
         return $this;
     }
 
+    /**
+     * @return Collection<int, Announcement>
+     */
+    public function getAnnouncement(): Collection
+    {
+        return $this->announcement;
+    }
+
+    public function addAnnouncement(Announcement $announcement): self
+    {
+        if (!$this->announcement->contains($announcement)) {
+            $this->announcement->add($announcement);
+            $announcement->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnouncement(Announcement $announcement): self
+    {
+        if ($this->announcement->removeElement($announcement)) {
+            // set the owning side to null (unless already changed)
+            if ($announcement->getCompany() === $this) {
+                $announcement->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getUsers(): ?Users
     {
         return $this->users;
     }
 
-    public function setUsers(?Users $users): self
+    public function setUsers(Users $users): self
     {
         $this->users = $users;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Annoncement>
-     */
-    public function getAnnoncements(): Collection
+    public function getWebsite(): ?string
     {
-        return $this->announcements;
+        return $this->website;
     }
 
-    public function addAnnoncement(Announcement $announcement): self
+    public function setWebsite(?string $website): self
     {
-        if (!$this->announcements->contains($announcement)) {
-            $this->announcements->add($announcement);
-            $announcement->setCompanyId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnoncement(Announcement $announcement): self
-    {
-        if ($this->announcements->removeElement($announcement)) {
-            // set the owning side to null (unless already changed)
-            if ($announcement->getCompanyId() === $this) {
-                $announcement->setCompanyId(null);
-            }
-        }
+        $this->website = $website;
 
         return $this;
     }

@@ -26,10 +26,6 @@ class Announcement
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'announcements')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Company $company_id = null;
-
     #[ORM\Column]
     private ?int $hours = null;
 
@@ -50,9 +46,12 @@ class Announcement
     #[ORM\JoinColumn(nullable: false)]
     private ?Contract $contract_id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'announcements')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Users $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'announcement')]
+    private ?Company $company = null;
+
+    #[ORM\ManyToOne(inversedBy: 'announcementUser')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $user = null;
 
     public function __toString(): string
     {
@@ -102,18 +101,6 @@ class Announcement
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getCompanyId(): ?Company
-    {
-        return $this->company_id;
-    }
-
-    public function setCompanyId(?Company $company_id): self
-    {
-        $this->company_id = $company_id;
 
         return $this;
     }
@@ -208,15 +195,28 @@ class Announcement
         return $this;
     }
 
-    public function getUserId(): ?Users
+    public function getCompany(): ?Company
     {
-        return $this->user_id;
+        return $this->company;
     }
 
-    public function setUserId(?Users $user_id): self
+    public function setCompany(?Company $company): self
     {
-        $this->user_id = $user_id;
+        $this->company = $company;
 
         return $this;
     }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }
