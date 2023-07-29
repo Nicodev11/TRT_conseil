@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PHPUnit\Framework\SelfDescribing;
 
 #[ORM\Entity(repositoryClass: AnnouncementRepository::class)]
 class Announcement
@@ -52,6 +53,9 @@ class Announcement
     #[ORM\ManyToOne(inversedBy: 'announcementUser')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $user = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $is_denied = null;
 
     public function __toString(): string
     {
@@ -215,6 +219,18 @@ class Announcement
     public function setUser(?Users $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isIsDenied(): ?bool
+    {
+        return $this->is_denied;
+    }
+
+    public function setIsDenied(?bool $is_denied): self
+    {
+        $this->is_denied = $is_denied;
 
         return $this;
     }

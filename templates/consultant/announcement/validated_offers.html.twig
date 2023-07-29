@@ -1,10 +1,10 @@
-{% extends 'base.html.twig' %} {% block title %}Mes annonces{% endblock %}
+{% extends 'base.html.twig' %} {% block title %}Annonces validées{% endblock %}
 {%block body %}
 
 <div class="container-fluid">
-  <h1 class="text-center my-5">Annonces validées</h1>
+  <h1 class="text-center mt-2 mb-5">Annonces validées</h1>
 
-  <table class="table table-striped align-middle container">
+  <table class="table table-striped align-middle">
     <thead>
       <tr>
         <th>Nom</th>
@@ -13,7 +13,7 @@
         <th>Statut</th>
         <th>Créé le</th>
         <th>Entreprise</th>
-        <th>actions</th>
+        <th class="text-center">actions</th>
       </tr>
     </thead>
     <tbody>
@@ -23,39 +23,36 @@
         <td>{{ announcement.hours }}</td>
         <td>{{ announcement.salary }}</td>
         <td>
-          <i class="bi bi-check-circle-fill text-success"> En ligne</i> 
+          {% if announcement.isValided == false and announcement.isDenied == false %}
+            <i class="bi bi-clock-fill text-warning"> En attente</i>
+          {% endif %}
+          {% if announcement.isValided == true and announcement.isDenied == false %}
+            <i class="bi bi-check-circle-fill text-success"> En ligne</i>
+          {% endif %}
+          {% if announcement.isValided == false and announcement.isDenied == true %}
+            <i class="bi bi-x-lg text-danger"> Refusée</i>
+          {% endif %}
         </td>
         <td>
           {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
         </td>
         <td>
-        {#}  <a
-            href="{{
-              path('company_show', { id: announcement.company.id })
-            }}"
-            class="text-decoration-none"
-          >
-            {{ announcement.company.name }}
-          </a>
-        {#}
+          {{ announcement.company.name }}
         </td>
         <td>
-          <a
-            class="btn btn-warning"
-            href="{{
-              path('consultant_announcement_show', {
-                name: announcement.name,
-                id: announcement.id
-              })
-            }}"
-          >
-            <i class="bi bi-eye"></i>
-          </a>
+          <div class="d-flex justify-content-around">
+            <a class="btn btn-warning my-auto" href="{{ path('consultant_announcement_show', {id: announcement.id})}}">
+              <i class="bi bi-eye"></i>
+            </a>
+            {{ include('consultant/announcement/_validate_form.html.twig') }}
+            {{ include('consultant/announcement/_denied_form.html.twig') }}
+          </div>
+          
         </td>
       </tr>
       {% else %}
       <tr>
-        <td colspan="9" class="text-center fw-bold my-2 text-danger">Il n'y a pas d'annonces validées</td>
+        <td colspan="9" class="text-center fw-bold my-2 text-danger">Il n'y a pas d'annonces en attente</td>
       </tr>
       {% endfor %}
     </tbody>

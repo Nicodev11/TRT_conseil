@@ -2,7 +2,7 @@
 {%block body %}
 
 <div class="container-fluid">
-  <h1 class="text-center my-5">Annonces en attente de validation</h1>
+  <h1 class="text-center mt-2 mb-5">Annonces en attente de validation</h1>
 
   <table class="table table-striped align-middle container">
     <thead>
@@ -23,27 +23,29 @@
         <td>{{ announcement.hours }}</td>
         <td>{{ announcement.salary }}</td>
         <td>
-          <i class="bi bi-hourglass-split text-primary">
-            En attente de confirmation</i>
+          {% if announcement.isValided == false and announcement.isDenied == false %}
+            <i class="bi bi-clock-fill text-warning"> En attente</i>
+          {% endif %}
+          {% if announcement.isValided == true and announcement.isDenied == false %}
+            <i class="bi bi-check-circle-fill text-success"> En ligne</i>
+          {% endif %}
+          {% if announcement.isValided == false and announcement.isDenied == true %}
+            <i class="bi bi-x-lg text-danger"> Refusée</i>
+          {% endif %}
         </td>
         <td>
           {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
         </td>
         <td>
-          {#
-            <a href="{{
-                path('company_show', { id: announcement.company.id })
-              }}" class="text-decoration-none">
-              {{ announcement.company.name }}
-            </a>
-          #}
+          {{ announcement.company.name }}
         </td>
         <td>
-          <div class="d-flex">
-            <a class="btn btn-warning m-auto" href="{{ path('consultant_announcement_show', {name: announcement.name, id: announcement.id})}}">
-            <i class="bi bi-eye"></i>
-          </a>
-          {{ include('consultant/announcement/_validate_form.html.twig') }}
+          <div class="d-flex justify-content-around">
+            <a class="btn btn-warning my-auto" href="{{ path('consultant_announcement_show', {company: announcement.company.name, id: announcement.id})}}">
+              <i class="bi bi-eye"></i>
+            </a>
+            {{ include('consultant/announcement/_validate_form.html.twig') }}
+            {{ include('consultant/announcement/_denied_form.html.twig') }}
           </div>
           
         </td>

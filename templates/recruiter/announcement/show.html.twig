@@ -1,46 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Annonce - {{announcement.name}} {% endblock %}
+{% block title %}Annonce - {{announcement}} {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="announcement_name mb-3">
-            <h2 class="text-center text-dark fs-1">{{ announcement.name }}</h2>
-        </div>
-        <div class="announcement_description list-group list-group-flush">
-            <div class="row">
-                <div class="col-lg-8 mb-3">
-                    <div class="description">
-                        <p class="fs-4 text-black">Description</p>
-                        <p class="ms-5">{{ announcement.description|nl2br }}</p>
-                    </div>
+<div class="container">
+    <div class="announcement_name my-3">
+        <h2 class="text-center text-dark fs-1">{{ announcement.name }}</h2>
+    </div>
+    <div class="announcement_description list-group list-group-flush ">
+        <div class="row mt-3">
+            <div class="col-lg-8 mb-3">
+                <div class="description">
+                    <p class="fs-4 text-black">Description</p>
+                    <p class="container">{{ announcement.description|nl2br }}</p>
                 </div>
-                <div class="col-lg-4">
-                    <p class="fs-4 text-black"> Plus d'informations</p>
-                    <ul class="list-group mb-5">
-                        <li class="list-group-item bg-body-tertiary">
-                            <p class="m-0"> Date de publication : {{ announcement.createdAt|date('d/m/Y') }} </p>
-                        </li>
-                        <li class="list-group-item bg-body-tertiary">
-                            <p class="m-0"> Type du contrat : {{contractName}} </p>
-                        </li>
-                        <li class="list-group-item bg-body-tertiary">
-                            <p class="m-0">Nombre d'heures : {{announcement.hours}}h</p>
-                        </li>
-                        <li class="list-group-item bg-body-tertiary">
-                            <p class="m-0">Salaire mensuel : {{announcement.salary}}€ brut</p>
-                        </li>
-                    </ul>               
+            </div>
+            <div class="col-lg-4">
+                <p class="fs-4 text-black"> Plus d'informations</p>
+                <ul class="list-group mb-5">
+                    <li class="list-group-item bg-body-tertiary">
+                        <p class="m-0"> Date de publication : {{ announcement.createdAt|date('d/m/Y') }} </p>
+                    </li>
+                    <li class="list-group-item bg-body-tertiary">
+                        <p class="m-0"> Type du contrat : {{contractName}} </p>
+                    </li>
+                    <li class="list-group-item bg-body-tertiary">
+                        <p class="m-0">Nombre d'heures : {{announcement.hours}}h</p>
+                    </li>
+                    <li class="list-group-item bg-body-tertiary">
+                        <p class="m-0">Salaire mensuel : {{announcement.salary}}€ </p>
+                    </li>
+                </ul>
+                <div class="card bg-body-tertiary text-center">
+                    <div class="card-body">
+                        <h5 class="card-title"> {{company.name}} </h5>
+                        <div class="card-text">
+                            <div class="address mt-2">
+                                <p class="m-0"> {{company.adress}} </p>
+                                <p class="m-0"> {{company.zip}} {{company.city}} </p>
+                            </div>
+                            <p class="mt-2 my-0"> {{company.phone}} </p>
+                            <p class="m-0"> {{company.email}} </p>
+                        </div>
+                        <a href="{{company.website}}" class="btn btn-info mt-2"> Site internet </a>
+                    </div>
+                    
+                </div>
+                <div class="actions my-3 text-center">
+                    <h5>Gerer l'annonce</h5>
+                    <div class="btn_action d-flex justify-content-center"> 
+                            <a 
+                                class="text-decoration-none text-reset btn btn-outline-primary my-2 me-2"
+                                href="{{ path('recruiter_announcement_edit', {'id': announcement.id}) }}"
+                            >
+                                 Modifier
+                            </a>
+                        {{ include('recruiter/announcement/_delete_form.html.twig') }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="btn_action d-flex float-end me-5">
-        <div class="btn btn-outline-primary my-2 me-2">
-            <a class="text-decoration-none text-reset" href="{{ path('recruiter_announcement_edit', {'id': announcement.id}) }}">Modifier</a>
-        </div>
-        {{ include('recruiter/announcement/_delete_form.html.twig') }}
-    </div>
-    
+
+
 {% endblock %}

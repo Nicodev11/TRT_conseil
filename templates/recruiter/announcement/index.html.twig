@@ -31,19 +31,23 @@
         <td>{{ announcement.hours }}</td>
         <td>{{ announcement.salary }}</td>
         <td>
-          {% if announcement.isValided == true %}
-          <i class="bi bi-check-circle-fill text-success"> En ligne</i>
-          {% elseif announcement.isValided == false %}
-          <i class="bi bi-hourglass-split text-primary"> En attente de confirmation</i>
+          {% if announcement.isValided == false and announcement.isDenied == false %}
+            <i class="bi bi-clock-fill text-warning"> En attente</i>
+          {% endif %}
+          {% if announcement.isValided == true and announcement.isDenied == false %}
+            <i class="bi bi-check-circle-fill text-success"> En ligne</i>
+          {% endif %}
+          {% if announcement.isValided == false and announcement.isDenied == true %}
+            <i class="bi bi-x-lg text-danger"> Refusée</i>
           {% endif %}
         </td>
-        <td>{{ announcement.company.name }}</td>
+        <td>{{ company.name }}</td>
         <td>
           {{ announcement.createdAt ? announcement.createdAt|date('d/m/Y H:i') : '' }}
         </td>
         <td>
           <a class="btn btn-warning"
-            href="{{ path('recruiter_announcement_show', { name: announcement.name , id: announcement.id }) }}">
+            href="{{ path('recruiter_announcement_show', { name: announcement.name, id: announcement.id }) }}">
             <i class="bi bi-eye"></i>
           </a>
           <a class="btn btn-success" href="{{ path('recruiter_announcement_edit', { id: announcement.id }) }}">
